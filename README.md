@@ -1,1 +1,1 @@
-Addon Manager for Sven-Co-Op
+Addon Manager for Sven Co-Op

@@ -10,12 +10,22 @@ def enable_addon(addon_name):
     addons_dir = Path.joinpath(working_dir, 'addons')
     game_dir = Path.joinpath(working_dir, 'game')
 
-    addon_src = Path.joinpath(addons_dir, addon_name)
     target = Path(game_dir)
     symlinks=False
 
     active_addons_file = os.path.abspath(addons_dir) + "\\active_addons.txt"
     
+    try:
+        if Path.is_dir(Path.joinpath(working_dir, addon_name)):
+            addon_src = Path.joinpath(addons_dir, addon_name)
+        else:
+            print(f'Error: addon {addon_name} not found')
+            sys.exit()
+    except Exception as e:
+        print(f'Error: {e}')
+        sys.exit()
+
+
     if game_dir.exists():
         print("game dir exists")
     if addons_dir.exists():
@@ -66,7 +76,6 @@ def disable_addon(addon_name):
     addons_dir = Path.joinpath(working_dir, 'addons')
     game_dir = Path.joinpath(working_dir, 'game')
 
-    addon_src = Path.joinpath(addons_dir, addon_name)
     target = Path(game_dir)
     symlinks=False
 
@@ -75,6 +84,15 @@ def disable_addon(addon_name):
     file_list = []
     active_addons_list = []
 
+    try:
+        if Path.is_dir(Path.joinpath(working_dir, addon_name)):
+            addon_src = Path.joinpath(addons_dir, addon_name)
+        else:
+            print(f'Error: addon {addon_name} not found')
+            sys.exit()
+    except Exception as e:
+        print(f'Error: {e}')
+        sys.exit()
 
     try:
         with open(active_addons_file, "r") as input:
@@ -121,7 +139,8 @@ def disable_addon(addon_name):
 
 
 if __name__ == "__main__":
-    addon_name = 'coolmod'
+    #addon_name = 'coolmod'
     #addon_name = 'evilmansion_fixed'
+    addon_name = 'dummyaddon'
     #enable_addon(addon_name)
     disable_addon(addon_name)

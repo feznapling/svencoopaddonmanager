@@ -1,2 +1,0 @@
-file not found error handling if addon isnt found
-start ui
