@@ -4,9 +4,8 @@ from pathlib import Path
 def ig_f(dir, files):
     return [f for f in files if os.path.isfile(os.path.join(dir, f))]
 
-def enable_addon():
-    #addon_name = 'evilmansion_fixed'
-    addon_name = 'coolmod'
+def enable_addon(addon_name):
+    
     working_dir = Path(os.getcwd())
     addons_dir = Path.joinpath(working_dir, 'addons')
     game_dir = Path.joinpath(working_dir, 'game')
@@ -27,14 +26,14 @@ def enable_addon():
 
         os.mkdir(addons_dir)
 
-    # try:
-    #     with open(active_addons_file, 'r') as file:
-    #         file.seek(0)
-    #         if addon_name in file.read():
-    #             print(f"addon '{addon_name}' already active")
-    #             sys.exit()
-    # except Exception as e:
-    #     print(f'Error: {e}')
+    try:
+        with open(active_addons_file, 'r') as file:
+            file.seek(0)
+            if addon_name in file.read():
+                print(f"addon '{addon_name}' already enabled")
+                sys.exit()
+    except Exception as e:
+        print(f'Error: {e}')
 
 
     #Create directory structure
@@ -61,9 +60,8 @@ def enable_addon():
     except Exception as e:
         print(f'Error: {e}')
 
-def disable_addon():
-    #addon_name = 'evilmansion_fixed'
-    addon_name = 'coolmod'
+def disable_addon(addon_name):
+    
     working_dir = Path(os.getcwd())
     addons_dir = Path.joinpath(working_dir, 'addons')
     game_dir = Path.joinpath(working_dir, 'game')
@@ -75,6 +73,26 @@ def disable_addon():
     active_addons_file = os.path.abspath(addons_dir) + "\\active_addons.txt"
 
     file_list = []
+    active_addons_list = []
+
+
+    try:
+        with open(active_addons_file, "r") as input:
+            temp = os.path.abspath(addons_dir) + "\\temp.txt"
+
+            if addon_name.strip("\n") in input.read():
+                input.seek(0)
+                with open(temp, "w") as output:
+                    for line in input:
+                        if line.strip("\n") != addon_name:
+                            output.write(line)
+                shutil.move(temp, active_addons_file)
+            else:
+                print(f"addon '{addon_name}' already disabled or not found")
+                sys.exit()
+    except Exception as e:
+        print(f'Error: {e}')
+
 
     for root, dirs, files in os.walk(addon_src, topdown=True):
         #print(os.path.basename(root))
@@ -103,5 +121,7 @@ def disable_addon():
 
 
 if __name__ == "__main__":
-    #enable_addon()
-    disable_addon()
+    addon_name = 'coolmod'
+    #addon_name = 'evilmansion_fixed'
+    #enable_addon(addon_name)
+    disable_addon(addon_name)
